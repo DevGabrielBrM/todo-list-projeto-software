@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Tarefas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Minhas Tarefas</h1>
+    <form method="POST" action="/add">
+        <input type="text" name="nome" placeholder="Nova tarefa" required>
+        <button type="submit">Adicionar</button>
+    </form>
+
+    <ul>
+        {% for tarefa in tarefas %}
+            <li>{{ tarefa['nome'] }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
