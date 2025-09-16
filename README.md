@@ -1,6 +1,3 @@
-# todo-list-projeto-software
-Projeto desenvolvido para a disciplina de Projeto de Software, contendo front-end, back-end e banco de dados, assim como documentos adicionais.
-
 # 🧑‍💻 Projeto de Software – Sistema de Tarefas
 
 Este repositório contém o desenvolvimento do projeto para a disciplina **Projeto de Software**, seguindo o modelo de desenvolvimento em camadas **(Front-end, Back-end e Banco de Dados)**.  
