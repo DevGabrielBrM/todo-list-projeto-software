@@ -1,11 +1,6 @@
 # todo-list-projeto-software
 Projeto desenvolvido para a disciplina de Projeto de Software, contendo front-end, back-end e banco de dados, assim como documentos adicionais.
 
-Perfeito! 🚀 Podemos criar um **README.md inicial** bem profissional, explicando até onde chegamos e já preparando terreno para as próximas sprints. Aqui vai uma sugestão para o seu projeto:
-
----
-
-```markdown
 # 🧑‍💻 Projeto de Software – Sistema de Tarefas
 
 Este repositório contém o desenvolvimento do projeto para a disciplina **Projeto de Software**, seguindo o modelo de desenvolvimento em camadas **(Front-end, Back-end e Banco de Dados)**.  
@@ -117,9 +112,3 @@ http://127.0.0.1:5000
 **Gabriel Briotto Monteiro**
 Projeto desenvolvido para a disciplina **Projeto de Software**.
 
-```
-
----
-
-Quer que eu já adicione esse README.md no seu projeto (dentro da raiz, onde está a pasta `Board`, `Codigo`, etc.) e te mostre os comandos Git para versionar e mandar para o GitHub?
-```
