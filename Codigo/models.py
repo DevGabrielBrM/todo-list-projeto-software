@@ -8,3 +8,8 @@ def adicionar_tarefa(nome):
     db = get_db()
     db.execute('INSERT INTO tarefas (nome) VALUES (?)', (nome,))
     db.commit()
+
+def concluir_tarefa(id):
+    db = get_db()
+    db.execute('UPDATE tarefas SET status = "CONCLUIDA" WHERE id = ?', (id,))
+    db.commit()

@@ -14,7 +14,14 @@
 
     <ul>
         {% for tarefa in tarefas %}
-            <li>{{ tarefa['nome'] }}</li>
+            <li class="{{ 'concluida' if tarefa['status'] == 'CONCLUIDA' else '' }}">
+                <span>{{ tarefa['nome'] }} - {{ tarefa['status'] }}</span>
+                {% if tarefa['status'] == 'PENDENTE' %}
+                    <form method="POST" action="{{ url_for('concluir', id=tarefa['id']) }}" style="display: inline;">
+                        <button type="submit">Concluir</button>
+                    </form>
+                {% endif %}
+            </li>
         {% endfor %}
     </ul>
 </body>
