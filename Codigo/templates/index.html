@@ -6,23 +6,86 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Minhas Tarefas</h1>
-    <form method="POST" action="/add">
-        <input type="text" name="nome" placeholder="Nova tarefa" required>
-        <button type="submit">Adicionar</button>
-    </form>
+    <div class="container">
+        <h1>Minhas Tarefas</h1>
 
-    <ul>
-        {% for tarefa in tarefas %}
-            <li class="{{ 'concluida' if tarefa['status'] == 'CONCLUIDA' else '' }}">
-                <span>{{ tarefa['nome'] }} - {{ tarefa['status'] }}</span>
-                {% if tarefa['status'] == 'PENDENTE' %}
-                    <form method="POST" action="{{ url_for('concluir', id=tarefa['id']) }}" style="display: inline;">
-                        <button type="submit">Concluir</button>
-                    </form>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+        <!-- Formulário de Adição -->
+        <form method="POST" action="/add" class="form-add">
+            <input type="text" name="nome" placeholder="Nova tarefa" required>
+            <button type="submit" class="btn adicionar">Adicionar</button>
+        </form>
+
+        <!-- Lista de Tarefas -->
+        <ul class="lista-tarefas">
+            {% for tarefa in tarefas %}
+                <li class="{{ 'concluida' if tarefa['status'] == 'CONCLUIDA' else '' }}">
+                    <span>{{ tarefa['nome'] }} - <strong>{{ tarefa['status'] }}</strong></span>
+
+                    <div class="botoes">
+                        {% if tarefa['status'] == 'PENDENTE' %}
+                            <form method="POST" action="{{ url_for('concluir', id=tarefa['id']) }}">
+                                <button type="submit" class="btn concluir">Concluir</button>
+                            </form>
+                        {% endif %}
+
+                        <button class="btn editar" 
+                                data-id="{{ tarefa['id'] }}" 
+                                data-nome="{{ tarefa['nome']|escape }}"
+                                onclick="handleEditar(this)">
+                            Editar
+                        </button>
+
+                        <form method="POST" 
+                              action="{{ url_for('excluir_tarefa_route', id=tarefa['id']) }}" 
+                              onsubmit="return confirmarExclusao()">
+                            <button type="submit" class="btn excluir">Excluir</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>Editar Tarefa</h2>
+            <form id="formEditar" method="POST">
+                <input type="text" id="novo_nome" name="novo_nome" placeholder="Novo nome da tarefa" required>
+                <div class="modal-botoes">
+                    <button type="submit" class="btn salvar">Salvar</button>
+                    <button type="button" class="btn cancelar" onclick="fecharModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function handleEditar(botao) {
+            const id = botao.getAttribute('data-id');
+            const nome = botao.getAttribute('data-nome');
+            abrirModal(id, nome);
+        }
+
+        function abrirModal(id, nome) {
+            const modal = document.getElementById('modal');
+            modal.style.display = 'flex';
+            document.getElementById('novo_nome').value = nome;
+            document.getElementById('formEditar').action = `/tarefas/${id}`;
+        }
+
+        function fecharModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function confirmarExclusao() {
+            return confirm("Tem certeza que deseja excluir esta tarefa?");
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) fecharModal();
+        }
+    </script>
 </body>
 </html>

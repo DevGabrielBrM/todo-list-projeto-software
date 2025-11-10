@@ -1,26 +1,85 @@
-from database import get_db, close_db
-from flask import Flask, render_template, request, redirect, g, url_for
-from models import listar_tarefas, adicionar_tarefa, concluir_tarefa
+from flask import Flask, render_template, request, redirect, url_for
+import os
+import sqlite3
 
-app = Flask(__name__)
-app.teardown_appcontext(close_db)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, 'templates'),
+    static_folder=os.path.join(BASE_DIR, 'static')
+)
+
+DB_PATH = os.path.join(BASE_DIR, 'instance', 'tarefas.db')
+
+
+def conectar():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def criar_tabela():
+    conn = conectar()
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS tarefas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDENTE'
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
 @app.route('/')
 def index():
-    tarefas = listar_tarefas()
+    conn = conectar()
+    tarefas = conn.execute('SELECT * FROM tarefas').fetchall()
+    conn.close()
     return render_template('index.html', tarefas=tarefas)
 
+
 @app.route('/add', methods=['POST'])
-def add():
+def add_tarefa():
     nome = request.form['nome']
-    adicionar_tarefa(nome)
+    if nome.strip():
+        conn = conectar()
+        conn.execute('INSERT INTO tarefas (nome) VALUES (?)', (nome,))
+        conn.commit()
+        conn.close()
     return redirect(url_for('index'))
 
-@app.route('/concluir/<int:id>', methods=['POST'])
+
+@app.route('/tarefas/<int:id>/concluir', methods=['POST'])
 def concluir(id):
-    concluir_tarefa(id)
+    conn = conectar()
+    conn.execute('UPDATE tarefas SET status = ? WHERE id = ?', ('CONCLUIDA', id))
+    conn.commit()
+    conn.close()
     return redirect(url_for('index'))
+
+
+@app.route('/tarefas/<int:id>', methods=['POST'])
+def editar(id):
+    novo_nome = request.form['novo_nome']
+    if novo_nome.strip():
+        conn = conectar()
+        conn.execute('UPDATE tarefas SET nome = ? WHERE id = ?', (novo_nome, id))
+        conn.commit()
+        conn.close()
+    return redirect(url_for('index'))
+
+
+@app.route('/tarefas/<int:id>/excluir', methods=['POST'])
+def excluir_tarefa_route(id):
+    conn = conectar()
+    conn.execute('DELETE FROM tarefas WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
+    criar_tabela()
     app.run(debug=True)

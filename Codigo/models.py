@@ -6,10 +6,20 @@ def listar_tarefas():
 
 def adicionar_tarefa(nome):
     db = get_db()
-    db.execute('INSERT INTO tarefas (nome) VALUES (?)', (nome,))
+    db.execute('INSERT INTO tarefas (nome, status) VALUES (?, "PENDENTE")', (nome,))
     db.commit()
 
 def concluir_tarefa(id):
     db = get_db()
     db.execute('UPDATE tarefas SET status = "CONCLUIDA" WHERE id = ?', (id,))
+    db.commit()
+
+def editar_tarefa(id, novo_nome):
+    db = get_db()
+    db.execute('UPDATE tarefas SET nome = ? WHERE id = ?', (novo_nome, id))
+    db.commit()
+
+def excluir_tarefa(id):
+    db = get_db()
+    db.execute('DELETE FROM tarefas WHERE id = ?', (id,))
     db.commit()
