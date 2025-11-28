@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import os
 import sqlite3
-
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -13,12 +12,10 @@ app = Flask(
 
 DB_PATH = os.path.join(BASE_DIR, 'instance', 'tarefas.db')
 
-
 def conectar():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
-
 
 def criar_tabela():
     conn = conectar()
@@ -39,7 +36,6 @@ def index():
     conn.close()
     return render_template('index.html', tarefas=tarefas)
 
-
 @app.route('/add', methods=['POST'])
 def add_tarefa():
     nome = request.form['nome']
@@ -50,7 +46,6 @@ def add_tarefa():
         conn.close()
     return redirect(url_for('index'))
 
-
 @app.route('/tarefas/<int:id>/concluir', methods=['POST'])
 def concluir(id):
     conn = conectar()
@@ -58,7 +53,6 @@ def concluir(id):
     conn.commit()
     conn.close()
     return redirect(url_for('index'))
-
 
 @app.route('/tarefas/<int:id>', methods=['POST'])
 def editar(id):
@@ -70,7 +64,6 @@ def editar(id):
         conn.close()
     return redirect(url_for('index'))
 
-
 @app.route('/tarefas/<int:id>/excluir', methods=['POST'])
 def excluir_tarefa_route(id):
     conn = conectar()
@@ -79,6 +72,27 @@ def excluir_tarefa_route(id):
     conn.close()
     return redirect(url_for('index'))
 
+# --- NOVAS ROTAS DA SPRINT 4 ---
+
+@app.route('/relatorio')
+def relatorio_json():
+    """Retorna os dados em formato JSON para o gráfico"""
+    conn = conectar()
+    total = conn.execute('SELECT COUNT(*) FROM tarefas').fetchone()[0]
+    concluidas = conn.execute('SELECT COUNT(*) FROM tarefas WHERE status = "CONCLUIDA"').fetchone()[0]
+    pendentes = conn.execute('SELECT COUNT(*) FROM tarefas WHERE status = "PENDENTE"').fetchone()[0]
+    conn.close()
+    
+    return jsonify({
+        'total': total,
+        'concluidas': concluidas,
+        'pendentes': pendentes
+    })
+
+@app.route('/estatisticas')
+def pagina_relatorio():
+    """Renderiza a página HTML do relatório"""
+    return render_template('relatorio.html')
 
 if __name__ == '__main__':
     criar_tabela()

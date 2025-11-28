@@ -1,111 +1,96 @@
-# 🧑‍💻 Projeto de Software – Sistema de Tarefas
+🧑‍💻 Projeto de Software – Sistema de Tarefas
 
-Este repositório contém o desenvolvimento do projeto para a disciplina **Projeto de Software**, seguindo o modelo de desenvolvimento em camadas **(Front-end, Back-end e Banco de Dados)**.  
-O projeto será entregue em **4 sprints**, e este repositório documenta o progresso desde a Sprint 1.
+Este repositório contém o desenvolvimento do projeto para a disciplina Projeto de Software, seguindo o modelo de desenvolvimento em camadas (Front-end, Back-end e Banco de Dados).
 
----
+O projeto foi entregue em 4 sprints, e este repositório documenta a versão final.
 
-## 📌 Sprint 1 – Estrutura Inicial do Projeto ✅
+📌 Status do Projeto: CONCLUÍDO ✅
 
-Nesta primeira sprint, focamos em **organizar a base do projeto** e preparar o ambiente para desenvolvimento.  
+Todas as funcionalidades planejadas foram implementadas com sucesso.
 
-### 🏗️ Estrutura de Pastas Criada
-```
+🏗️ Estrutura de Pastas Final
 
-Projeto\_Software/
+Projeto_Software/
 │   README.md
 │
-├───Board/              # Planejamento (Kanban, ideias, requisitos)
 ├───Codigo/             # Código-fonte principal
-│   │   app.py          # Arquivo principal (Flask)
+│   │   app.py          # Arquivo principal (Flask com Rotas API e View)
 │   │   database.py     # Conexão com o banco de dados
-│   │   init\_DB.py      # Script para inicialização do banco
-│   │   models.py       # Modelos e funções de acesso ao banco
+│   │   init_DB.py      # Script para inicialização do banco
+│   │   models.py       # Modelos de dados
 │   │
-│   ├───static/         # Arquivos estáticos (CSS, JS, imagens)
-│   └───templates/      # Templates HTML (Jinja2)
-│
-├───Documentacao/       # Documentos do projeto (PDFs, diagramas)
-└───Videos/             # Vídeos de apresentação
+│   ├───static/         # Arquivos estáticos (style.css)
+│   └───templates/      # Templates HTML
+│       │   index.html      # Página principal
+│       │   relatorio.html  # Página de dashboard (Novo!)
 
-````
 
-### 🗄️ Banco de Dados
-- Criada a pasta `instance/` para armazenar o banco SQLite.
-- Criado o banco `tarefas.db` com a tabela inicial:
-```sql
-CREATE TABLE tarefas (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT
-);
-````
+✨ Funcionalidades Implementadas
 
-### 🌐 Back-End
+Gerenciamento de Tarefas (CRUD):
 
-* Implementação do `app.py` com Flask.
-* Configuração inicial de rota `/` para listar tarefas.
+Listar todas as tarefas.
 
-### 🎨 Front-End
+Adicionar novas tarefas.
 
-* Criado `templates/index.html` com um layout simples para exibir tarefas.
-* Criado `static/style.css` para estilos básicos.
+Editar tarefas existentes (via Modal).
 
----
+Excluir tarefas.
 
-## 🚀 Como Rodar o Projeto
+Marcar tarefas como CONCLUÍDA.
 
-1. Clone o repositório:
+Dashboard e Relatórios (Sprint 4):
 
-```bash
-git clone <URL_DO_REPOSITORIO>
-```
+Rota /relatorio retornando JSON com contagem de status.
 
-2. Entre na pasta de código:
+Página /estatisticas com gráfico de rosca (Chart.js) mostrando visualmente a produtividade.
 
-```bash
-cd Codigo
-```
+📅 Histórico de Sprints
 
-3. Crie o banco de dados:
+Sprint 1: Estrutura inicial, Banco de Dados e Listagem. ✅
 
-```bash
+Sprint 2: Rotas para Adicionar e Excluir tarefas. ✅
+
+Sprint 3: Melhoria de Layout e Edição de tarefas. ✅
+
+Sprint 4: Relatórios, Gráficos e Documentação Final. ✅
+
+🚀 Como Rodar o Projeto
+
+Clone o repositório e entre na pasta Codigo.
+
+Instale as dependências (se necessário):
+
+pip install flask
+
+
+Inicialize o banco de dados:
+
 python init_DB.py
-```
 
-4. Rode o servidor Flask:
 
-```bash
+Rode o servidor:
+
 python app.py
-```
 
-5. Acesse no navegador:
 
-```
-http://127.0.0.1:5000
-```
+Acesse no navegador:
 
----
+Lista: http://127.0.0.1:5000
 
-## 📅 Próximas Sprints
+Relatório: http://127.0.0.1:5000/estatisticas
 
-* **Sprint 2:** Criar rotas para adicionar e remover tarefas.
-* **Sprint 3:** Melhorar layout e implementar edição de tarefas.
-* **Sprint 4:** Testes, documentação final e deploy.
+🛠️ Tecnologias Utilizadas
 
----
+Linguagem: Python 3.13
 
-## 🛠️ Tecnologias Utilizadas
+Framework Web: Flask
 
-* **Linguagem:** Python 3.13
-* **Framework Web:** Flask
-* **Banco de Dados:** SQLite
-* **Front-End:** HTML + CSS (Jinja2 Templates)
-* **Controle de Versão:** Git & GitHub
+Banco de Dados: SQLite
 
----
+Front-End: HTML5, CSS3, JavaScript (Fetch API + Chart.js)
 
-## 👤 Autor
+👤 Autor
 
-**Gabriel Briotto Monteiro**
-Projeto desenvolvido para a disciplina **Projeto de Software**.
-
+Gabriel Briotto Monteiro
+Projeto desenvolvido para a disciplina Projeto de Software.

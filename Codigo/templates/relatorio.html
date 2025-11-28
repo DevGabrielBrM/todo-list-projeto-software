@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Tarefas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Importando Chart.js para o gráfico -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard-cards {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        .card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .card h3 { margin: 0; font-size: 14px; color: #666; }
+        .card p { margin: 10px 0 0; font-size: 32px; font-weight: bold; color: #333; }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .btn-voltar {
+            display: block;
+            width: fit-content;
+            margin: 20px auto 0;
+            text-decoration: none;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Relatório de Produtividade</h1>
+
+        <!-- Cartões com contadores -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>Total</h3>
+                <p id="total">0</p>
+            </div>
+            <div class="card">
+                <h3>Concluídas</h3>
+                <p id="concluidas" style="color: #28a745;">0</p>
+            </div>
+            <div class="card">
+                <h3>Pendentes</h3>
+                <p id="pendentes" style="color: #ffc107;">0</p>
+            </div>
+        </div>
+
+        <!-- Área do Gráfico -->
+        <div class="chart-container">
+            <canvas id="meuGrafico"></canvas>
+        </div>
+
+        <a href="/" class="btn-voltar">Voltar para Tarefas</a>
+    </div>
+
+    <script>
+        // Ao carregar a página, busca os dados do back-end
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/relatorio')
+                .then(response => response.json())
+                .then(dados => {
+                    // Atualiza os números na tela
+                    document.getElementById('total').innerText = dados.total;
+                    document.getElementById('concluidas').innerText = dados.concluidas;
+                    document.getElementById('pendentes').innerText = dados.pendentes;
+
+                    // Cria o gráfico
+                    criarGrafico(dados.concluidas, dados.pendentes);
+                })
+                .catch(error => console.error('Erro ao buscar dados:', error));
+        });
+
+        function criarGrafico(concluidas, pendentes) {
+            const ctx = document.getElementById('meuGrafico').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut', // Tipo de gráfico (rosca)
+                data: {
+                    labels: ['Concluídas', 'Pendentes'],
+                    datasets: [{
+                        data: [concluidas, pendentes],
+                        backgroundColor: [
+                            '#28a745', // Verde
+                            '#ffc107'  // Amarelo
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
